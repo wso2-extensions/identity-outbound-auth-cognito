@@ -51,6 +51,6 @@ public class CognitoOIDCAuthenticatorConstants {
 
     public static final String COGNITO_OAUTH_URL = "/oauth2/authorize";
     public static final String COGNITO_TOKEN_URL = "/oauth2/token";
-    public static final String COGNITO_USER_INFO__URL = "/oauth2/userInfo";
-    public static final String COGNITO_LOGOUT__URL = "/logout";
+    public static final String COGNITO_USER_INFO_URL = "/oauth2/userInfo";
+    public static final String COGNITO_LOGOUT_URL = "/logout";
 }

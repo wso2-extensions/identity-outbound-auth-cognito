@@ -55,8 +55,8 @@ public class CognitoOIDCAuthenticator extends OpenIDConnectAuthenticator {
     @Override
     public boolean canHandle(HttpServletRequest request) {
 
-        if (log.isTraceEnabled()) {
-            log.trace("Inside CognitoOIDCAuthenticator.canHandle()");
+        if (log.isDebugEnabled()) {
+            log.debug("Inside CognitoOIDCAuthenticator.canHandle()");
         }
         boolean canHandle = super.canHandle(request);
         if (CognitoOIDCAuthenticatorConstants.COGNITO_LOGOUT.equals(request.getParameter
@@ -72,8 +72,8 @@ public class CognitoOIDCAuthenticator extends OpenIDConnectAuthenticator {
         if (log.isDebugEnabled()) {
             log.debug("Inside CognitoOIDCAuthenticator.getContextIdentifier()");
         }
-        Cookie cookie = FrameworkUtils.getCookie(request, CognitoOIDCAuthenticatorConstants
-                .COGNITO_LOGOUT_STATE_COOKIE);
+        Cookie cookie =
+                FrameworkUtils.getCookie(request, CognitoOIDCAuthenticatorConstants.COGNITO_LOGOUT_STATE_COOKIE);
         if (cookie != null) {
             String state = cookie.getValue();
             return state;
@@ -133,7 +133,7 @@ public class CognitoOIDCAuthenticator extends OpenIDConnectAuthenticator {
                 .get(CognitoOIDCAuthenticatorConstants.COGNITO_LOGOUT_ENDPOINT);
 
         if (logoutEndpoint == null) {
-            logoutEndpoint = CognitoOIDCAuthenticatorConstants.COGNITO_LOGOUT__URL;
+            logoutEndpoint = CognitoOIDCAuthenticatorConstants.COGNITO_LOGOUT_URL;
         }
     }
 
@@ -143,7 +143,7 @@ public class CognitoOIDCAuthenticator extends OpenIDConnectAuthenticator {
                 .get(CognitoOIDCAuthenticatorConstants.COGNITO_USER_INFO_ENDPOINT);
 
         if (userInfoEnoint == null) {
-            userInfoEnoint = CognitoOIDCAuthenticatorConstants.COGNITO_USER_INFO__URL;
+            userInfoEnoint = CognitoOIDCAuthenticatorConstants.COGNITO_USER_INFO_URL;
         }
     }
 
@@ -260,14 +260,6 @@ public class CognitoOIDCAuthenticator extends OpenIDConnectAuthenticator {
         return configProperties;
     }
 
-//    @Override
-//    protected void initiateAuthenticationRequest(HttpServletRequest request, HttpServletResponse response,
-//                                                 AuthenticationContext context) throws AuthenticationFailedException {
-//
-//        FrameworkUtils.removeCookie(request, response, CognitoOIDCAuthenticatorConstants.COGNITO_LOGOUT_STATE_COOKIE);
-//        super.initiateAuthenticationRequest(request, response, context);
-//    }
-
     @Override
     protected void initiateLogoutRequest(HttpServletRequest request, HttpServletResponse response,
                                          AuthenticationContext context) throws LogoutFailedException {
@@ -287,9 +279,10 @@ public class CognitoOIDCAuthenticator extends OpenIDConnectAuthenticator {
         FrameworkUtils.setCookie(request, response, CognitoOIDCAuthenticatorConstants.COGNITO_LOGOUT_STATE_COOKIE,
                 context.getContextIdentifier(), null);
         try {
-            response.sendRedirect(logoutUrl + "?" + getParamsString(parameters));
+            logoutUrl = FrameworkUtils.appendQueryParamsStringToUrl(logoutUrl, getParamsString(parameters));
+            response.sendRedirect(logoutUrl);
         } catch (IOException e) {
-            throw new LogoutFailedException("Error while triggering cognito logout", e);
+            throw new LogoutFailedException("Error while triggering cognito logout for  " + clientId, e);
         }
 
     }

@@ -26,6 +26,9 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.wso2.carbon.identity.application.authentication.framework.ApplicationAuthenticator;
 import org.wso2.carbon.identity.application.authenticator.cognito.CognitoOIDCAuthenticator;
 
+/**
+ * The component class for the Cognito Connector.
+ */
 @Component(
         name = "identity.application.authenticator.cognito.component",
         immediate = true
@@ -36,22 +39,24 @@ public class CognitoOpenIDConnectAuthenticatorServiceComponent {
 
     @Activate
     protected void activate(ComponentContext ctxt) {
+
         try {
             CognitoOIDCAuthenticator cognitoOIDCAuthenticator = new CognitoOIDCAuthenticator();
             ctxt.getBundleContext().registerService(ApplicationAuthenticator.class.getName(),
                     cognitoOIDCAuthenticator, null);
             if (log.isDebugEnabled()) {
-                log.debug("OpenID Connect Authenticator bundle is activated");
+                log.debug("AWS Cognito Authenticator bundle is activated");
             }
         } catch (Throwable e) {
-            log.fatal(" Error while activating oidc authenticator ", e);
+            log.fatal(" Error while activating AWS Cognito Authenticator ", e);
         }
     }
 
     @Deactivate
     protected void deactivate(ComponentContext ctxt) {
+
         if (log.isDebugEnabled()) {
-            log.debug("OpenID Connect Authenticator bundle is deactivated");
+            log.debug("AWS Cognito Authenticator bundle is deactivated");
         }
     }
 }
