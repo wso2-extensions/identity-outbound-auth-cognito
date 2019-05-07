@@ -37,6 +37,19 @@ You can either download the AWS Cognito authenticator artifacts or build the aut
        Note that the `org.wso2.carbon.identity.application.authenticator.cognito-x.x.x.jar` file is created in the `identity-outbound-auth-cognito/component/target` directory.
     3. Copy the `org.wso2.carbon.identity.application.authenticator.cognito-x.x.x.jar` file into the `<IS-Home>/repository/components/dropins` directory. 
 
+- Add the following configuration in IS_HOME/repository/conf/identity/application-authentication.xml
+        
+        <AuthenticatorConfig name="CognitoOIDCAuthenticator" enabled="true">
+            <Parameter name="ClaimDialectUri">http://wso2.org/oidc/claim</Parameter>
+            <Parameter name="CognitoAuthzEndpoint">/oauth2/authorize</Parameter>
+            <Parameter name="CognitoTokenEndpoint">/oauth2/token</Parameter>
+            <Parameter name="CognitoUserInfoEndpoint">/oauth2/userInfo</Parameter>
+            <Parameter name="CognitoLogoutEndpoint">/logout</Parameter>
+        </AuthenticatorConfig>
+        
+
+Note : These configurations are hardcoded in the Authenticator. If the configurations are not present these will taken as default
+
 ## Configuring the AWS Cognito user pool
 
 Follow the steps below to configure an user pool in AWS Cognito.
