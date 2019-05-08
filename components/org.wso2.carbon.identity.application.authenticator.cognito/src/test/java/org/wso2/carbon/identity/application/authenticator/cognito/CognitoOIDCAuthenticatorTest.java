@@ -24,10 +24,10 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.wso2.carbon.identity.application.authentication.framework.config.builder.FileBasedConfigurationBuilder;
-import org.wso2.carbon.identity.application.authentication.framework.config.model.AuthenticatorConfig;
 import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
 import org.wso2.carbon.identity.application.common.model.Property;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,11 +67,12 @@ public class CognitoOIDCAuthenticatorTest {
         authenticatorProperties.put(CognitoOIDCAuthenticatorConstants.CLIENT_ID, "client-id");
         authenticatorProperties.put(CognitoOIDCAuthenticatorConstants.LOGOUT_REDIRECT_URL, "logout-redirect");
         authenticatorProperties.put(CognitoOIDCAuthenticatorConstants.ADDITIONAL_QUERY_PARAMS, "additional-param");
-        AuthenticatorConfig authConfig = new AuthenticatorConfig();
-        authConfig.setParameterMap(authenticatorProperties);
 
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        FileBasedConfigurationBuilder.getInstance(classLoader.getResource("application-authentication.xml").getPath());
+        Field configFilePathField = FileBasedConfigurationBuilder.class.getDeclaredField("configFilePath");
+        configFilePathField.setAccessible(true);
+        String path = classLoader.getResource("application-authentication.xml").getPath();
+        configFilePathField.set(null, path);
     }
 
     @Test
@@ -84,6 +85,10 @@ public class CognitoOIDCAuthenticatorTest {
         when(request.getCookies()).thenReturn(cookies);
         boolean can = cognitoOIDCAuthenticator.canHandle(request);
         Assert.assertTrue(can);
+
+        when(request.getCookies()).thenReturn(new Cookie[0]);
+        can = cognitoOIDCAuthenticator.canHandle(request);
+        Assert.assertFalse(can);
     }
 
     @Test
@@ -98,32 +103,19 @@ public class CognitoOIDCAuthenticatorTest {
     }
 
     @Test
-    public void testGetClaimDialectURI() {
+    public void testFileParameter() {
 
         String claimDialectURI = cognitoOIDCAuthenticator.getClaimDialectURI();
-        Assert.assertEquals(claimDialectURI, "http://wso2.org/oidc/claim", "Claim uri didn't match");
-    }
-
-    @Test
-    public void testGetAuthorizationServerEndpoint() {
+        Assert.assertEquals(claimDialectURI, "claimURI", "Claim uri didn't match");
 
         String endpoint = cognitoOIDCAuthenticator.getAuthorizationServerEndpoint(authenticatorProperties);
-        Assert.assertEquals(endpoint, "user-pool/oauth2/authorize", "authorize endpoint didn't match");
+        Assert.assertEquals(endpoint, "user-pool/authorize", "authorize endpoint didn't match");
 
-    }
+        endpoint = cognitoOIDCAuthenticator.getTokenEndpoint(authenticatorProperties);
+        Assert.assertEquals(endpoint, "user-pool/token", "token endpoint didn't match");
 
-    @Test
-    public void testGetTokenEndpoint() {
-
-        String endpoint = cognitoOIDCAuthenticator.getTokenEndpoint(authenticatorProperties);
-        Assert.assertEquals(endpoint, "user-pool/oauth2/token", "token endpoint didn't match");
-    }
-
-    @Test
-    public void testGetUserInfoEndpoint() {
-
-        String endpoint = cognitoOIDCAuthenticator.getUserInfoEndpoint(clientResponse, authenticatorProperties);
-        Assert.assertEquals(endpoint, "user-pool/oauth2/userInfo", "user info endpoint didn't match");
+        endpoint = cognitoOIDCAuthenticator.getUserInfoEndpoint(clientResponse, authenticatorProperties);
+        Assert.assertEquals(endpoint, "user-pool/userinfo", "user info endpoint didn't match");
     }
 
     @Test

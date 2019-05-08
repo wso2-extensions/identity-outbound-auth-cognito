@@ -20,13 +20,7 @@
 <ApplicationAuthentication xmlns="http://wso2.org/projects/carbon/application-authentication.xml">
 
     <AuthenticatorConfigs>
-        <AuthenticatorConfig name="CognitoOIDCAuthenticator" enabled="true">
-            <Parameter name="ClaimDialectUri">claimURI</Parameter>
-            <Parameter name="CognitoAuthzEndpoint">/authorize</Parameter>
-            <Parameter name="CognitoTokenEndpoint">/token</Parameter>
-            <Parameter name="CognitoUserInfoEndpoint">/userinfo</Parameter>
-            <Parameter name="CognitoLogoutEndpoint">/logout</Parameter>
-        </AuthenticatorConfig>
+
     </AuthenticatorConfigs>
 
 </ApplicationAuthentication>

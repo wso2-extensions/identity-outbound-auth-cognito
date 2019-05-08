@@ -177,6 +177,7 @@
                 <groupId>org.wso2.carbon.identity.framework</groupId>
                 <artifactId>org.wso2.carbon.identity.testutil</artifactId>
                 <version>${carbon.identity.framework.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -244,7 +245,6 @@
 
     <modules>
         <module>components/org.wso2.carbon.identity.application.authenticator.cognito</module>
-        <!--<module>features/org.wso2.carbon.identity.application.authenticator.cognito.server.feature</module>-->
     </modules>
 
     <properties>
