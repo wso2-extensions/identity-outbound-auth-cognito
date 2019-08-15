@@ -35,7 +35,7 @@ import org.wso2.carbon.identity.application.authenticator.cognito.CognitoOIDCAut
 )
 public class CognitoOpenIDConnectAuthenticatorServiceComponent {
 
-    private static Log log = LogFactory.getLog(CognitoOpenIDConnectAuthenticatorServiceComponent.class);
+    private static final Log log = LogFactory.getLog(CognitoOpenIDConnectAuthenticatorServiceComponent.class);
 
     @Activate
     protected void activate(ComponentContext ctxt) {
