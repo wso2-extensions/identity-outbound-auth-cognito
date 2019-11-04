@@ -30,9 +30,6 @@ import org.wso2.carbon.identity.application.authenticator.oidc.OpenIDConnectAuth
 import org.wso2.carbon.identity.application.common.model.Property;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -284,7 +281,7 @@ public class CognitoOIDCAuthenticator extends OpenIDConnectAuthenticator {
         FrameworkUtils.setCookie(request, response, CognitoOIDCAuthenticatorConstants.COGNITO_LOGOUT_STATE_COOKIE,
                 context.getContextIdentifier(), null);
         try {
-            logoutUrl = appendQueryParamsToUrl(logoutUrl, parameters);
+            logoutUrl = FrameworkUtils.appendQueryParamsToUrl(logoutUrl, parameters);
             response.sendRedirect(logoutUrl);
         } catch (IOException e) {
             throw new LogoutFailedException("Error while triggering cognito logout for  " + clientId, e);
@@ -301,27 +298,6 @@ public class CognitoOIDCAuthenticator extends OpenIDConnectAuthenticator {
             log.debug("Logout response received for  Cognito IDP with client id : " + clientId);
         }
         FrameworkUtils.removeCookie(request, response, CognitoOIDCAuthenticatorConstants.COGNITO_LOGOUT_STATE_COOKIE);
-    }
-
-    private static String appendQueryParamsToUrl(String url, Map<String, String> queryParams)
-            throws UnsupportedEncodingException {
-
-        if (StringUtils.isEmpty(url)) {
-            throw new IllegalArgumentException("Passed URL is empty.");
-        }
-        if (queryParams == null) {
-            throw new IllegalArgumentException("Passed query param map is empty.");
-        }
-
-        List<String> queryParam1 = new ArrayList<>();
-        for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-            String encodedValue = URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.name());
-            queryParam1.add(entry.getKey() + "=" + encodedValue);
-        }
-
-        String queryString = StringUtils.join(queryParam1, "&");
-
-        return FrameworkUtils.appendQueryParamsStringToUrl(url, queryString);
     }
 }
 
