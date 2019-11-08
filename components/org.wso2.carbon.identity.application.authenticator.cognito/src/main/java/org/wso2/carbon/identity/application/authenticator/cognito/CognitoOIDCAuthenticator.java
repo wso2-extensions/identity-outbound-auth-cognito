@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.oltu.oauth2.client.response.OAuthClientResponse;
+import org.wso2.carbon.extension.identity.helper.util.IdentityHelperUtil;
 import org.wso2.carbon.identity.application.authentication.framework.config.builder.FileBasedConfigurationBuilder;
 import org.wso2.carbon.identity.application.authentication.framework.config.model.AuthenticatorConfig;
 import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
@@ -281,7 +282,7 @@ public class CognitoOIDCAuthenticator extends OpenIDConnectAuthenticator {
         FrameworkUtils.setCookie(request, response, CognitoOIDCAuthenticatorConstants.COGNITO_LOGOUT_STATE_COOKIE,
                 context.getContextIdentifier(), null);
         try {
-            logoutUrl = FrameworkUtils.appendQueryParamsToUrl(logoutUrl, parameters);
+            logoutUrl = IdentityHelperUtil.appendQueryParamsToUrl(logoutUrl, parameters);
             response.sendRedirect(logoutUrl);
         } catch (IOException e) {
             throw new LogoutFailedException("Error while triggering cognito logout for  " + clientId, e);
