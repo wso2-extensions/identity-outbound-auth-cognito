@@ -1,6 +1,6 @@
 # AWS Cognito Authenticator
 
-The AWS Cognito Authenticator allows users to log in to your organization's applications using [AWS Cognito](https://docs.aws.amazon.com/cognito/index.html), which is a distributed version control and source code management service. The AWS Cognito authenticator is configured as a federated authenticator in WSO2 Identity Server 5.6.0 and above. 
+The AWS Cognito Authenticator allows users to log in to your organization's applications using [AWS Cognito](https://docs.aws.amazon.com/cognito/index.html), which is a distributed version control and source code management service. The AWS Cognito authenticator is configured as a federated authenticator in WSO2 Identity Server 5.7.0 and above. 
 The AWS Cognito Authenticator also supports federated single logout with the AWS Cognito. 
 
 Let's explore the following topics to learn how to configure the AWS Cognito authenticator and WSO2 Identity Server. 
@@ -18,7 +18,7 @@ Let's explore the following topics to learn how to configure the AWS Cognito aut
 
 | Version  | Supported WSO2 IS versions |
 | ------------- | ------------- |
-| 1.0.0| above 5.6.0    |
+| 1.0.0| above 5.7.0    |
 
 ## Deploying AWS Cognito authenticator artifacts
 You can either download the AWS Cognito authenticator artifacts or build the authenticator from the source code. 
