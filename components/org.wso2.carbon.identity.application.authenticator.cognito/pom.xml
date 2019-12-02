@@ -14,14 +14,13 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2.carbon.identity.outbound.auth.cognito</groupId>
         <artifactId>identity-outbound-auth-cognito</artifactId>
         <relativePath>../../pom.xml</relativePath>
-        <version>1.0.0</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -52,6 +51,10 @@
         <dependency>
             <groupId>org.wso2.carbon.identity.outbound.auth.oidc</groupId>
             <artifactId>org.wso2.carbon.identity.application.authenticator.oidc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.extension.identity.authenticator.utils</groupId>
+            <artifactId>org.wso2.carbon.extension.identity.helper</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -113,7 +116,9 @@
                             org.wso2.carbon.identity.application.common.model;
                             version="${carbon.identity.framework.package.import.version.range}",
                             org.wso2.carbon.identity.application.authenticator.oidc;
-                            version="${carbon.identity.authenticator.oidc.imp.pkg.version.range}"
+                            version="${carbon.identity.authenticator.oidc.imp.pkg.version.range}",
+                            org.wso2.carbon.extension.identity.helper.util;
+                            version="${carbon.identity.authenticator.utils.package.import.version.range}"
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.carbon.identity.application.authenticator.cognito.internal,
