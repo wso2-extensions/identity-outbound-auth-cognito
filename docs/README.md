@@ -25,7 +25,7 @@ You can either download the AWS Cognito authenticator artifacts or build the aut
 
 1. To download the AWS Cognito artifacts: 
     1. Stop WSO2 Identity Server if it is already running.
-    2. Visit the [Connector Store]() and download the artifacts.
+    2. Visit the [Connector Store](https://store.wso2.com/store/assets/isconnector/details/b998e79f-cfe0-44a7-9af4-0525945aca2b) and download the artifacts.
     3. Copy the `org.wso2.carbon.identity.application.authenticator.cognito-x.x.x.jar` file into the `<IS-Home>/repository/components/dropins` directory.
     
 2. To build from the source code:
