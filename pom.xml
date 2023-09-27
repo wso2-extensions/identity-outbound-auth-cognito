@@ -27,7 +27,7 @@
     <groupId>org.wso2.carbon.identity.outbound.auth.cognito</groupId>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>identity-outbound-auth-cognito</artifactId>
-    <version>1.0.8-SNAPSHOT</version>
+    <version>1.0.8</version>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Cognito Authenticator Feature Aggregator Module</name>
     <description>
@@ -39,7 +39,7 @@
         <url>https://github.com/wso2-extensions/identity-outbound-auth-cognito.git</url>
         <developerConnection>scm:git:https://github.com/wso2-extensions/identity-outbound-auth-cognito.git</developerConnection>
         <connection>scm:git:https://github.com/wso2-extensions/identity-outbound-auth-cognito.git</connection>
-        <tag>HEAD</tag>
+        <tag>v1.0.8</tag>
     </scm>
 
 
