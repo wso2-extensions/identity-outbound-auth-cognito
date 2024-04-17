@@ -8,5 +8,18 @@
     "labels": [
         "OIDC"
     ],
-    "releases": []
+    "releases": [
+        {
+            "tagName": "1.0.3",
+            "products": [
+                "IS 5.7.0"
+            ]
+        },
+        {
+            "tagName": "1.0.0",
+            "products": [
+                "IS 5.7.0"
+            ]
+        }
+    ]
 }
