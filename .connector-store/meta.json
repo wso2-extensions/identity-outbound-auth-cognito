@@ -1,0 +1,32 @@
+{
+    "name": "Cognito",
+    "owner": "WSO2",
+    "category": "Federated authenticator",
+    "documentationUrl": "https://github.com/wso2-extensions/identity-outbound-auth-cognito/tree/master/docs",
+    "description": "The AWS Cognito Authenticator allows users to log in to your organization's applications using AWS Cognito.",
+    "status": "Active",
+    "labels": [
+        "OIDC"
+    ],
+    "releases": [
+        {
+            "tagName": "1.0.4",
+            "products": [
+                "IS 6.0.0",
+                "IS 5.10.0"
+            ]
+        },
+        {
+            "tagName": "1.0.3",
+            "products": [
+                "IS 5.7.0"
+            ]
+        },
+        {
+            "tagName": "1.0.0",
+            "products": [
+                "IS 5.7.0"
+            ]
+        }
+    ]
+}
