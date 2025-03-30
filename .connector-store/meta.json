@@ -10,6 +10,13 @@
     ],
     "releases": [
         {
+            "tagName": "v1.0.5",
+            "products": [
+                "IS 7.1.0",
+                "IS 7.0.0"
+            ]
+        },
+        {
             "tagName": "v1.0.4",
             "products": [
                 "IS 6.0.0",
