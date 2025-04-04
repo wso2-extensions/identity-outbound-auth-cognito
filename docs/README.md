@@ -9,9 +9,11 @@ Let's explore the following topics to learn how to configure the AWS Cognito aut
 
 * [Configuring the AWS Cognito user pool](#Configuring-the-AWS-Cognito-user-pool)
 
-* [Configuring the identity provider](#Configuring-the-Identity-Provider)
+* [Configuring the identity provider](#configuring-the-identity-provider)
 
 * [Configuring the service provider](#Configuring-the-Service-Provider)
+
+* [Try out the login flow with Cognito test user](#try-out-the-login-flow-with-cognito-test-user)
 ``
 
 ## Compatibility 
@@ -25,7 +27,7 @@ You can either download the AWS Cognito authenticator artifacts or build the aut
 
 1. To download the AWS Cognito artifacts: 
     1. Stop WSO2 Identity Server if it is already running.
-    2. Visit the [Connector Store](https://store.wso2.com/store/assets/isconnector/details/b998e79f-cfe0-44a7-9af4-0525945aca2b) and download the artifacts.
+    2. Visit the [Connector Store](https://store.wso2.com/connector/identity-outbound-auth-cognito) and download the artifacts.
     3. Copy the `org.wso2.carbon.identity.application.authenticator.cognito-x.x.x.jar` file into the `<IS-Home>/repository/components/dropins` directory.
     
 2. To build from the source code:
@@ -37,16 +39,39 @@ You can either download the AWS Cognito authenticator artifacts or build the aut
        Note that the `org.wso2.carbon.identity.application.authenticator.cognito-x.x.x.jar` file is created in the `identity-outbound-auth-cognito/component/target` directory.
     3. Copy the `org.wso2.carbon.identity.application.authenticator.cognito-x.x.x.jar` file into the `<IS-Home>/repository/components/dropins` directory. 
 
-- Add the following configuration in IS_HOME/repository/conf/identity/application-authentication.xml
-        
-        <AuthenticatorConfig name="CognitoOIDCAuthenticator" enabled="true">
-            <Parameter name="ClaimDialectUri">http://wso2.org/oidc/claim</Parameter>
-            <Parameter name="CognitoAuthzEndpoint">/oauth2/authorize</Parameter>
-            <Parameter name="CognitoTokenEndpoint">/oauth2/token</Parameter>
-            <Parameter name="CognitoUserInfoEndpoint">/oauth2/userInfo</Parameter>
-            <Parameter name="CognitoLogoutEndpoint">/logout</Parameter>
-        </AuthenticatorConfig>
-        
+### Additional Configuration for AWS Cognito Authenticator
+
+To enable the AWS Cognito Authenticator, you need to add the following configurations in the `IS_HOME/repository/conf/identity/application-authentication.xml` file or the `deployment.toml` file, depending on the version of WSO2 Identity Server you are using.
+
+#### For WSO2 Identity Server with `deployment.toml` Support
+
+Add the following configuration to the `IS_HOME/repository/conf/deployment.toml` file:
+
+```toml
+[authentication.authenticator.cognito]
+name = "CognitoOIDCAuthenticator"
+enable = true
+[authentication.authenticator.cognito.parameters]
+ClaimDialectUri = "http://wso2.org/oidc/claim"
+CognitoAuthzEndpoint = "/oauth2/authorize"
+CognitoTokenEndpoint = "/oauth2/token"
+CognitoUserInfoEndpoint = "/oauth2/userInfo"
+CognitoLogoutEndpoint = "/logout"
+```
+
+#### For WSO2 Identity Server Without `deployment.toml` Support
+
+Add the following configuration to the `IS_HOME/repository/conf/identity/application-authentication.xml` file:
+
+```xml
+<AuthenticatorConfig name="CognitoOIDCAuthenticator" enabled="true">
+  <Parameter name="ClaimDialectUri">http://wso2.org/oidc/claim</Parameter>
+  <Parameter name="CognitoAuthzEndpoint">/oauth2/authorize</Parameter>
+  <Parameter name="CognitoTokenEndpoint">/oauth2/token</Parameter>
+  <Parameter name="CognitoUserInfoEndpoint">/oauth2/userInfo</Parameter>
+  <Parameter name="CognitoLogoutEndpoint">/logout</Parameter>
+</AuthenticatorConfig>
+``` 
 
 Note : These configurations are hardcoded in the Authenticator. If the configurations are not present these will taken as default
 
@@ -56,34 +81,64 @@ Follow the steps below to configure an user pool in AWS Cognito.
 
 1. Sign in to [AWS Console](https://console.aws.amazon.com/console/home).
 2. Search for Amazon Cognito and click on it service.
-   ![Amazon Cognito Service](images/AWS_Cognito_Home.png) 
-3. Click on 'Manage User Pools' and then create a User Pool
-    ![Create User Pool](images/Create_User_Pool.png)
-    Provide a 'Pool name' and  'Review Default'. Then review the setting and click on 'Create'. After that the user pool will be created
-4. In the General setting, click on App clients.
-    ![User Pool Create App Clients](images/User_Pool_App_Clients.png)
-5. Click 'App client' and provide 'App client name'. Then click on 'Create app client'
-    ![User Pool App Clients](images/AWS_Cognito_App_Client.png)
-6. The App client details will be prompted. Take a note of the 'App client id' and 'App client secret'
-    ![User Pool App Clients](images/AWS_Client_Details.png)
-7. In the App client setting of the App integration of the user pool provide the following
-    - Enabled Identity Providers : Cognito User Pool 
-    - Callback URL(s) : https://<is_host>:<is_port>/commonauth
-    - Sign out URL(s) : https://<is_host>:<is_port>/commonauth?state=logout
-    - Allowed OAuth Flows  : Authorization code grant
-    - Allowed OAuth Scopes  : openid
-      
-  Note : It is mandatory to have the state=logout added as the query parameter of the sign out url
+3. Click on **User Pools** and create a new user pool.
+  ![Create User Pool](images/Create_User_Pool.png)
 
-  ![App Client Setting](images/AWS_Cognito_App_Client_Setting.png)
-8. Set up the Domain name for the User Pool. You can specify 'Amazon Cognito domain' or use your own domain
-  ![App Domain Name](images/AWS_Cognito_Domain_Name.png)
-9. In 'Users and Groups' create user.
+  - Select **Traditional web application** as the application type.
+  - Provide a name for your application.
+  - Choose **Email** and **Username** as the sign-in identifiers.
+  - Choose **email**, **family_name**, and **given_name** as the required attributes for sign-up.
+  - Add the return URL as the commonauth endpoint:
+    `https://<IS_HOST>:<IS_PORT>/t/<TENANT_DOMAIN>/commonauth`
+4. On the **Set up resources for your application** page, click the **Go to overview** button.  
+5. In the left-side panel, under the **Applications** section, select **App clients**.  
+  ![User Pool App Clients](images/AWS_Cognito_App_Client.png)  
+6. Note down the **Client ID** and **Client secret** from the app client details.  
+7. Under **App clients**, navigate to the **Login Pages** tab, click **Edit**, and add the following sign-out URL:  
+  `https://<IS_HOST>:<IS_PORT>/t/<TENANT_DOMAIN>/commonauth?state=logout`  
+  Save the changes.  
+  ![Configure Sign Out Callback](images/configure_sign_out.png)  
 
+  > **Note:** The query parameter `state=logout` is mandatory in the sign-out URL.  
+
+8. In the left-side panel, under **User Management**, select **Users** and create a test user for sign-in testing.  
+  ![User Creation](images/create_user.png)  
+9. Navigate to the **Domain** section under **Branding** and note down the Cognito domain.
 
 ## Configuring the identity provider
 
 An identity provider (IdP) is responsible for authenticating users and issuing identification information by using security tokens like SAML 2.0, OpenID Connect, OAuth 2.0 and WS-Trust.
+
+### Configuring the identity provider (IS 7.0.0 Onwards)
+
+> **Note:** This section is applicable only if you are using an Identity Server version below 7.0.0.
+
+Follow the steps below to configure WSO2 Identity Server as an IdP that uses AWS Cognito for federated authentication. 
+
+> **Before you begin**
+> 1. [Download](http://wso2.com/products/identity-server/) WSO2 Identity Server.
+> 2. [Run](https://is.docs.wso2.com/en/latest/deploy/get-started/run-the-product/) WSO2 Identity Server.
+
+1. Access the WSO2 Identity Server [Management Console](https://is.docs.wso2.com/en/latest/deploy/get-started/run-the-product/#access-the-wso2-identity-server-console) as an administrator.
+2. Go to **Connections** and select **New Connection**. From the available templates, choose **Custom Authenticator (Plugin-based)**. Enter a name for the connection (e.g., Cognito) and click **Create**.  
+  ![Connection](images/create_connection.png)
+4. On the connection edit page, navigate to the **Settings** tab. Click **New Authenticator**, select **CognitoOIDCAuthenticator**, and then click **Next**.
+
+5. Provide the following details for the fields:
+
+  - **Client Id**: Enter the client ID copied from the Cognito console.
+  - **Client Secret**: Enter the client secret copied from the Cognito console.
+  - **Callback URL**: `https://<IS_HOST>:<IS_PORT>/t/<TENANT_DOMAIN>/commonauth`
+  - **User Pool Domain**: Enter the domain copied from the Cognito console.
+  - **Logout Redirect URL**: `https://<IS_HOST>:<IS_PORT>/t/<TENANT_DOMAIN>/commonauth?state=logout`
+
+  ![Configure Identity Provider](images/configure_authenticator.png)
+
+6. Click **Finish**.
+
+### Configuring the identity provider (Below IS 7.0.0)
+
+> **Note:** This section is applicable only if you are using an Identity Server version above 7.0.0.
 
 Follow the steps below to configure WSO2 Identity Server as an IdP that uses AWS Cognito for federated authentication. 
 
@@ -146,7 +201,31 @@ Follow the steps below to configure WSO2 Identity Server as an IdP that uses AWS
 
 5. Click **Register**. 
 
-You have successfully added the identity provider. Next, you will configure the service provider. 
-
 ## Configuring the service provider
+
+### Configuring the service provider (IS 7.0.0 Onwards)
+
+> **Note:** This section is applicable only if you are using an Identity Server version above 7.0.0.
+
+1. Navigate to the **Applications** section and click **New Application** to create an application of your choice for testing login functionality using OIDC, SAML, or WS-Trust protocols.
+2. Open the **Login Flow** tab of the newly created application. Click **Add Sign In Option** and select the **Cognito** connection as the sign-in option for the first step.
+  ![Login Flow](images/login_flow.png)
+
+### Configuring the service provider (Below IS 7.0.0)
+
+> **Note:** This section is applicable only if you are using an Identity Server version below 7.0.0.
+
 - In the 'Local & Outbound Authentication Configuration' of the service provider add the created identity provider as federated authenticator
+
+## Try out the login flow with Cognito test user
+
+Once you have completed the configuration of the identity provider and service provider, you can test the login flow using the Cognito test user created earlier.
+
+1. Navigate to the application you configured in WSO2 Identity Server.
+2. Click on the login button or access the login URL of the application.
+3. On the WSO2 Identity Server login page, select the **Cognito** sign-in option.
+4. You will be redirected to the Cognito login page.
+5. Enter the credentials of the test user you created in the AWS Cognito user pool and click **Sign In**.
+6. Upon successful authentication, you will be redirected back to the application with the authenticated session.
+
+> **Note:** If you encounter any issues during the login process, verify the configurations in both AWS Cognito and WSO2 Identity Server to ensure they are correct.
