@@ -193,7 +193,7 @@
         <carbon.identity.authenticator.oidc.imp.pkg.version.range>[5.0.0, 6.0.0)</carbon.identity.authenticator.oidc.imp.pkg.version.range>
         <!--Carbon Identity Framework Version-->
         <carbon.identity.framework.version>5.20.254</carbon.identity.framework.version>
-        <carbon.identity.framework.package.import.version.range>[5.20.254, 8.0.0)</carbon.identity.framework.package.import.version.range>
+        <carbon.identity.framework.package.import.version.range>[5.11.256, 8.0.0)</carbon.identity.framework.package.import.version.range>
         <carbon.identity.authenticator.utils.version>1.0.10</carbon.identity.authenticator.utils.version>
         <carbon.identity.authenticator.utils.package.import.version.range>[1.0.10,2.0.0)
         </carbon.identity.authenticator.utils.package.import.version.range>
